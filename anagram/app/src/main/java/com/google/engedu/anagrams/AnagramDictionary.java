@@ -53,7 +53,7 @@ public class AnagramDictionary {
         while((line = in.readLine()) != null) {
             String word = line.trim();
             wordList.add(word);
-
+            wordSet.add(word);
             // If no key found create a value for it in the hashMap
             if(lettersToWord.get(sortLetters(word)) == null){
                 lettersToWord.put(sortLetters(word), new ArrayList<String>());
@@ -69,7 +69,7 @@ public class AnagramDictionary {
         of the base word
     */
     public boolean isGoodWord(String word, String base) {
-        return true;
+        return wordSet.contains(word) && !word.contains(base);
     }
 
     /*
@@ -102,6 +102,13 @@ public class AnagramDictionary {
     */
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
+        for(int i = (int)'a'; i <= (int)'z'; i++){
+            String str = word + (char) i;
+
+            if(lettersToWord.get((sortLetters(str))) != null){
+                result.addAll(lettersToWord.get(sortLetters(str)));
+            }
+        }
         return result;
     }
 
