@@ -42,6 +42,9 @@ public class AnagramDictionary {
 
         - lettersToWord: key is the sorted letters and value is the
           list of anagram strings of the given word
+
+        - sizeToWords: contains key as the length of the word and value
+          is number of words with the length matching the key.
      */
     private static ArrayList<String> wordList = new ArrayList<>();
     private static HashSet<String> wordSet = new HashSet<>();
@@ -122,7 +125,10 @@ public class AnagramDictionary {
     }
 
     /*
-        Pick a word with the desired number of anagrams
+        Picks a starter word based on the MIN_NUM_ANAGRAMS
+        returns a random word to the user and increments the
+        wordLength after each play, until max  MAX_WORD_LENGTH
+        Reached. 
     */
     public String pickGoodStarterWord() {
         ArrayList<String> arr = sizeToWords.get(wordLength);
@@ -131,6 +137,9 @@ public class AnagramDictionary {
         while(getAnagramsWithOneMoreLetter(word).size() < MIN_NUM_ANAGRAMS){
             word =  arr.get(random.nextInt(arr.size()));
         }
+
+        if(wordLength < MAX_WORD_LENGTH)
+            wordLength++;
         return word;
     }
 }
