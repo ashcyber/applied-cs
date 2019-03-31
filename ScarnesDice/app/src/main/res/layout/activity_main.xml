@@ -89,9 +89,10 @@
             android:textAlignment="center"
             android:gravity="center">
             <TextView
+                android:id="@+id/turn_label_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TURN SCORE"
+                android:text="PLAYER TURN SCORE"
                 android:gravity="center"
                 android:textSize="16dp"
                 android:padding="16dp"/>
