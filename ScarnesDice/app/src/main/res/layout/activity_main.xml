@@ -45,7 +45,7 @@
                     android:text="0"
                     android:textColor="#fff"
                     android:layout_weight="1"
-                    android:textSize="32dp"
+                    android:textSize="16dp"
                     android:gravity="center"
                     />
 
@@ -77,15 +77,36 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="#fff"
-                    android:textSize="32dp" />
+                    android:textSize="16dp" />
 
 
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TURN SCORE"
+                android:gravity="center"
+                android:textSize="16dp"
+                android:padding="16dp"/>
+            <TextView
+                android:id="@+id/turn_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16dp"
+                android:padding="16dp"/>
 
+        </LinearLayout>
 
         <ImageView
+            android:id="@+id/dice_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
