@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 changeDiceImage(dice_val);
                 if(dice_val == 1) {
                     user_turn_score = 0;
+                    disableButtons();
                     Handler handle = new Handler();
                     handle.postDelayed(new Runnable() {
                         @Override
@@ -171,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void computerTurn() {
         turnLabel.setText("COMP TURN SCORE");
-        rollButton.setEnabled(false);
-        holdButton.setEnabled(false);
+
+        disableButtons();
 
         final Handler handle = new Handler();
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 int comp_dice_val = random.nextInt(6) + 1;
 
                 if(comp_dice_val ==  1){
-                    winnerText.setText(("COMP ROLLED 1, Your Turn" ));
+                    winnerText.setText(("COMP ROLLED 1, YOUR TURN" ));
                     computerResetValues();
                 }
                 else if(comp_turn_score >= 20){
@@ -209,6 +210,11 @@ public class MainActivity extends AppCompatActivity {
         changeDiceImage(1);
         winnerText.setText("");
         isWin = false;
+    }
+
+    private void disableButtons(){
+        rollButton.setEnabled(false);
+        holdButton.setEnabled(false);
     }
 
     private void checkWinner(){
