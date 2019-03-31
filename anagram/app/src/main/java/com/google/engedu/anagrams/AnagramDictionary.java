@@ -81,7 +81,7 @@ public class AnagramDictionary {
         of the base word
     */
     public boolean isGoodWord(String word, String base) {
-        return wordSet.contains(word);
+        return wordSet.contains(word) && !word.contains(base);
     }
 
     /*
@@ -128,7 +128,7 @@ public class AnagramDictionary {
         Picks a starter word based on the MIN_NUM_ANAGRAMS
         returns a random word to the user and increments the
         wordLength after each play, until max  MAX_WORD_LENGTH
-        Reached. 
+        Reached.
     */
     public String pickGoodStarterWord() {
         ArrayList<String> arr = sizeToWords.get(wordLength);
