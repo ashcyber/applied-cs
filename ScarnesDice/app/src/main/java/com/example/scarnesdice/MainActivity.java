@@ -1,5 +1,6 @@
 package com.example.scarnesdice;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -7,18 +8,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.nio.channels.Channel;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private static int user_overall_score = 0;
     private static int comp_overall_score = 0;
     private static int user_turn_score = 0;
     private static int comp_turn_score = 0;
+
+    private static  boolean isWin = false;
+
+    private Timer timer;
 
     private Random random = new Random();
 
@@ -32,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView turnScoreText;
     private TextView playerOverAllScoreText;
     private TextView compOverallScoreText;
+    private TextView winnerText;
 
     // Image View
     private ImageView diceImage;
@@ -51,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         playerOverAllScoreText = (TextView) findViewById(R.id.player_score);
         compOverallScoreText = (TextView) findViewById(R.id.comp_score);
 
+        winnerText = (TextView) findViewById(R.id.game_winner);
 
         diceImage = (ImageView) findViewById(R.id.dice_image);
 
@@ -60,11 +71,30 @@ public class MainActivity extends AppCompatActivity {
         rollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                winnerText.setText("");
                 int dice_val = random.nextInt(6) + 1;
                 changeDiceImage(dice_val);
                 if(dice_val == 1) {
                     user_turn_score = 0;
-                    computerTurn();
+                    Handler handle = new Handler();
+                    handle.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            winnerText.setText("You rolled 1");
+
+                            Handler handle2 = new Handler();
+                            handle2.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    winnerText.setText("");
+                                    if(isWin == false){
+                                        computerTurn();
+                                    }
+                                }
+                            }, 1000);
+
+                        }
+                    }, 500);
                 }else{
                     user_turn_score+= dice_val;
                 }
@@ -81,13 +111,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // COMPUTE
                 user_overall_score += user_turn_score;
+                checkWinner();
+
                 user_turn_score = 0;
 
                 // DISPLAY
                 playerOverAllScoreText.setText(("" + user_overall_score));
+                turnScoreText.setText(("" + 0));
+                changeDiceImage(1);
 
                 // COMPUTER CHANCE
-                computerTurn();
+                if(isWin == false){
+                    computerTurn();
+                }
             }
         });
 
@@ -97,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test", "I WAS CLICKED : RESET");
-
+                resetAllValues();
             }
         });
     }
@@ -142,26 +177,85 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void computerTurn() {
-        turnScoreText.setText(("" + 0));
         turnLabel.setText("COMP TURN SCORE");
         rollButton.setEnabled(false);
         holdButton.setEnabled(false);
 
-        int comp_dice_val = random.nextInt(6) + 1;
+        final Handler handle = new Handler();
 
-        while(comp_turn_score < 10 && comp_dice_val != 1){
-            comp_turn_score += comp_dice_val;
-            Log.d("test" , ("" + comp_turn_score + ", DICE: " + comp_dice_val));
-            comp_dice_val = random.nextInt(6) + 1;
+        handle.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int comp_dice_val = random.nextInt(6) + 1;
+
+                if(comp_dice_val ==  1){
+                    winnerText.setText(("COMP ROLLED 1, Your Turn" ));
+                    computerResetValues();
+                }
+                else if(comp_turn_score >= 20){
+                    comp_overall_score += comp_turn_score;
+                    checkWinner();
+                    computerResetValues();
+                }else{
+                    comp_turn_score += comp_dice_val;
+                    turnScoreText.setText(("" + comp_turn_score));
+                    changeDiceImage(comp_dice_val);
+                    computerTurn();
+                }
+            }
+        }, 1000);
+    }
+    private void resetAllValues(){
+        user_overall_score = 0;
+        comp_overall_score = 0;
+        user_turn_score = 0;
+        comp_turn_score =0;
+        turnScoreText.setText(("" + 0));
+        playerOverAllScoreText.setText(("" + 0));
+        compOverallScoreText.setText(("" + 0));
+        changeDiceImage(1);
+        winnerText.setText("");
+        isWin = false;
+    }
+
+    private void checkWinner(){
+        if(user_overall_score >= 100){
+            isWin = true;
+            Handler handle = new Handler();
+            handle.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    winnerText.setText(("PLAYER WINS"));
+
+                    Handler handle1 = new Handler();
+                    handle1.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            resetAllValues();
+                        }
+                    }, 1750);
+                }
+            }, 500);
+            resetAllValues();
         }
 
-        Log.d("text", ("OUT: " + comp_turn_score));
+        else if(comp_overall_score >= 100){
+            isWin = true;
+            Handler handle = new Handler();
+            handle.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    winnerText.setText(("COMPUTER WINS"));
 
-        if(comp_turn_score >= 10){
-            // HOLD
-            comp_overall_score += comp_turn_score;
+                    Handler handle1 = new Handler();
+                    handle1.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            resetAllValues();
+                        }
+                    }, 1750);
+                }
+            }, 500);
         }
-
-        computerResetValues();
     }
 }
