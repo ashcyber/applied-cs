@@ -61,7 +61,6 @@ public class AnagramDictionary {
             lettersToWord.get(sortLetters(word)).add(word);
         }
 
-        Log.d("test", lettersToWord.toString());
     }
 
     /*
