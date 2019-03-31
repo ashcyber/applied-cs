@@ -69,7 +69,7 @@ public class AnagramDictionary {
         of the base word
     */
     public boolean isGoodWord(String word, String base) {
-        return wordSet.contains(word) && !word.contains(base);
+        return wordSet.contains(word);
     }
 
     /*
@@ -116,6 +116,14 @@ public class AnagramDictionary {
         Pick a word with the desired number of anagrams
     */
     public String pickGoodStarterWord() {
-        return "skate";
+        String word =  "";
+        do {
+            word = wordList.get(random.nextInt(wordList.size()));
+
+        }while(lettersToWord.get(sortLetters(word)).size() < MIN_NUM_ANAGRAMS);
+
+        List<String> r = lettersToWord.get(sortLetters(word));
+
+        return r.get(random.nextInt(r.size()));
     }
 }
