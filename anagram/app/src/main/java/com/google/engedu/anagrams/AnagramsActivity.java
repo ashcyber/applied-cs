@@ -47,6 +47,12 @@ public class AnagramsActivity extends AppCompatActivity {
     private String currentWord;
     private List<String> anagrams;
 
+
+    /*
+        On create: Method first called when the app initializes
+        Consist of main components such as EditText to take in input from
+        the user.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,16 +85,24 @@ public class AnagramsActivity extends AppCompatActivity {
         });
     }
 
+    /*
+        This function sets the color of the word depending n the condition
+        that the word is a good word or not and it is in the anagrams list.
+        If the word matches then it is remove from the anagram array.
+
+    */
     private void processWord(EditText editText) {
         TextView resultView = (TextView) findViewById(R.id.resultView);
         String word = editText.getText().toString().trim().toLowerCase();
         if (word.length() == 0) {
             return;
         }
-        String color = "#cc0029";
+        String color = "#cc0029"; // red
+        /* MATCH */
         if (dictionary.isGoodWord(word, currentWord) && anagrams.contains(word)) {
             anagrams.remove(word);
-            color = "#00aa29";
+            color = "#00aa29";  // Green
+        /* WRONG WORD */
         } else {
             word = "X " + word;
         }
