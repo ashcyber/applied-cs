@@ -46,21 +46,30 @@ public class AnagramDictionary {
     private static ArrayList<String> wordList = new ArrayList<>();
     private static HashSet<String> wordSet = new HashSet<>();
     private static HashMap<String, ArrayList<String>> lettersToWord = new HashMap<>();
+    private static HashMap<Integer, ArrayList<String>> sizeToWords  = new HashMap<>();
+    private int wordLength;
 
     public AnagramDictionary(Reader reader) throws IOException {
         BufferedReader in = new BufferedReader(reader);
         String line;
+        wordLength = DEFAULT_WORD_LENGTH;
         while((line = in.readLine()) != null) {
             String word = line.trim();
             wordList.add(word);
             wordSet.add(word);
+
+            // if no key found by length then create one and add
+            if(sizeToWords.get(word.length()) == null){
+                sizeToWords.put(word.length(), new ArrayList<String>());
+            }
+            sizeToWords.get(word.length()).add(word);
+
             // If no key found create a value for it in the hashMap
             if(lettersToWord.get(sortLetters(word)) == null){
                 lettersToWord.put(sortLetters(word), new ArrayList<String>());
             }
             lettersToWord.get(sortLetters(word)).add(word);
         }
-
     }
 
     /*
@@ -116,14 +125,12 @@ public class AnagramDictionary {
         Pick a word with the desired number of anagrams
     */
     public String pickGoodStarterWord() {
-        String word =  "";
-        do {
-            word = wordList.get(random.nextInt(wordList.size()));
+        ArrayList<String> arr = sizeToWords.get(wordLength);
+        String word =  arr.get(random.nextInt(arr.size()));
 
-        }while(lettersToWord.get(sortLetters(word)).size() < MIN_NUM_ANAGRAMS);
-
-        List<String> r = lettersToWord.get(sortLetters(word));
-
-        return r.get(random.nextInt(r.size()));
+        while(getAnagramsWithOneMoreLetter(word).size() < MIN_NUM_ANAGRAMS){
+            word =  arr.get(random.nextInt(arr.size()));
+        }
+        return word;
     }
 }
