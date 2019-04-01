@@ -23,30 +23,45 @@ import java.util.Iterator;
 
 public class CircularLinkedList implements Iterable<Point> {
 
+    Node head;
+
     private class Node {
         Point point;
         Node prev, next;
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        Node(){
+            this.prev = null;
+            this.next = null;
+        }
+
+        Node(Point p){
+            this.point = p;
+            this.prev = null;
+            this.next = null;
+        }
     }
 
-    Node head;
-
-    public void insertBeginning(Point p) {
-        // Create a New Node
-        Node newNode = new Node();
-        newNode.point = p;
-
-        // Add Node at the beginning;
+    // Helper function for creating node
+    public Node makeNode(Point p){
+        Node newNode = new Node(p);
         if(head == null){
             head = newNode;
-        }else{
-            newNode.next = head;
-            head = newNode;
+            head.next = head;
+            head.prev = head;
+            head.next.next = head;
+
         }
+        return newNode;
+    }
+    public void insertBeginning(Point p) {
+        // Create a New Node
+        Node newNode = makeNode(p);
+
+        // Add Node at the beginning;
+        newNode.next = head;
+        newNode.prev = head.prev;
+        newNode.prev.next = newNode;
+        head.prev = newNode;
     }
 
     private float distanceBetween(Point from, Point to) {
@@ -56,22 +71,55 @@ public class CircularLinkedList implements Iterable<Point> {
     public float totalDistance() {
         float total = 0;
 
-        Node curr;
-        if(head != null){
-            curr = head;
-            while(curr.next != null){
-                total+=distanceBetween(curr.point, curr.next.point);
-                curr = curr.next;
-            }
+        CircularLinkedListIterator itr = new CircularLinkedListIterator();
+
+        // When itr becomes head hasNext returns null because current is set to null by .next()
+        while(itr.hasNext()){
+            total += distanceBetween(itr.current.point,
+                    itr.current.next.point);
+            itr.next();
         }
+
         return total;
     }
 
     public void insertNearest(Point p) {
+        Node newNode = makeNode(p);
 
+        float near_dis = Float.MAX_VALUE;
+        Node nearest_node = null;
+
+        CircularLinkedListIterator itr = new CircularLinkedListIterator();
+
+        while(itr.hasNext()){
+            Point cur = itr.current.point;
+
+            if(near_dis > distanceBetween(cur,p)){
+                near_dis = distanceBetween(cur,p);
+                nearest_node = itr.current;
+            }
+            itr.next();
+        }
+
+        newNode.next = nearest_node.next;
+        newNode.prev = nearest_node;
+        nearest_node.next = newNode;
     }
 
     public void insertSmallest(Point p) {
+        Node newNode = makeNode(p);
+
+        if(head.next == head){
+            newNode.next = head;
+            newNode.prev = head.prev;
+            newNode.prev.next = newNode;
+            head.prev = newNode;
+        }else{
+            // TODO : LOGIC FOR INSERT SMALLEST
+        }
+
+
+
 
     }
 

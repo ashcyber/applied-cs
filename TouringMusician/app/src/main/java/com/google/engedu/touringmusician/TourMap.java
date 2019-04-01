@@ -54,15 +54,36 @@ public class TourMap extends View {
         linePaint.setColor(Color.BLUE);
         linePaint.setStrokeWidth(10);
 
+        Point start = null;
+        Point end = null;
+
         Point prev = null;
+
+        int point_count = 0;
+
         for (Point p : list) {
+
             // If p is the first point
             if(prev != null)
                 canvas.drawLine(prev.x, prev.y,p.x,p.y,linePaint);
             prev = p;
 
             canvas.drawCircle(p.x, p.y, 20, pointPaint);
+
+            // record initial point as start
+            if(start == null)
+                start = p;
+
+            // record the last point here
+            end = p;
+
+            point_count++;
         }
+
+        if(point_count >= 3){
+            canvas.drawLine(start.x,start.y,end.x,end.y,linePaint);
+        }
+
         list.totalDistance();
     }
 
