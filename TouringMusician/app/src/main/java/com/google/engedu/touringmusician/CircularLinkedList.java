@@ -28,12 +28,7 @@ public class CircularLinkedList implements Iterable<Point> {
     private class Node {
         Point point;
         Node prev, next;
-
-        Node(){
-            this.prev = null;
-            this.next = null;
-        }
-
+        
         Node(Point p){
             this.point = p;
             this.prev = null;
@@ -111,16 +106,47 @@ public class CircularLinkedList implements Iterable<Point> {
 
         if(head.next == head){
             newNode.next = head;
-            newNode.prev = head.prev;
-            newNode.prev.next = newNode;
+            newNode.prev = head;
+            head.next = newNode;
             head.prev = newNode;
+
         }else{
-            // TODO : LOGIC FOR INSERT SMALLEST
+            /*
+                 O
+               /   \
+              /     \
+             O ===== O
+
+                Find point where,
+                difference between  [ = ] (dist) and [ - ](dist) should be least possible
+             */
+            float deltaDistance = Float.MAX_VALUE;
+            Node reqNode = null;
+
+            CircularLinkedListIterator itr = new CircularLinkedListIterator();
+
+            while(itr.current.next != head){
+
+                float d1 = distanceBetween(itr.current.point, newNode.point);
+                float d2 = distanceBetween(newNode.point, itr.current.next.point);
+
+                float diff_dist = (d1+d2) - (distanceBetween(itr.current.point,
+                         itr.current.next.point));
+
+                if(deltaDistance > diff_dist){
+                    deltaDistance = diff_dist;
+                    reqNode = itr.current;
+                 }
+
+                 itr.next();
+            }
+
+            // required node to insert is found
+            newNode.prev = reqNode;
+            newNode.next = reqNode.next;
+            reqNode.next = newNode;
+
         }
-
-
-
-
     }
 
     public void reset() {
