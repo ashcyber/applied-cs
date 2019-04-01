@@ -14,7 +14,7 @@ you.
 ### Scarne's Dice 
 > Whoever reaches a score of 100 first, wins the game. If a player rolls a 1 on the die, no score given for the player. If a player holds, the score is added to the total for the given player. 
 ---
-- Timed Events, UI
+- Asynchronous Programming, UI
 
 <img src="https://raw.githubusercontent.com/ashcyber/applied-cs/master/ScarnesDice/scarne.gif" width="200px">
 
