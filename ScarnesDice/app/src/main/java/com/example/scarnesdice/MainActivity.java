@@ -3,6 +3,7 @@ package com.example.scarnesdice;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     handle.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            winnerText.setText("You rolled 1");
+                            winnerText.setText("YOU ROLLED 1");
 
                             Handler handle2 = new Handler();
                             handle2.postDelayed(new Runnable() {
@@ -232,10 +233,9 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             resetAllValues();
                         }
-                    }, 1750);
+                    }, 1000);
                 }
             }, 500);
-            resetAllValues();
         }
 
         else if(comp_overall_score >= 100){
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             resetAllValues();
                         }
-                    }, 1750);
+                    }, 1000);
                 }
             }, 500);
         }

@@ -152,7 +152,7 @@
         <TextView
             android:id="@+id/game_winner"
             android:gravity="center"
-            android:textSize="16dp"
+            android:textSize="32dp"
             android:fontFamily="sans-serif-condensed-medium"
             android:layout_marginTop="32dp"
             android:layout_width="match_parent"

@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
-    
+
     /*
         ACTION_DRAG_STARED -> highlights the both linear layout where the word
         will be dragged
