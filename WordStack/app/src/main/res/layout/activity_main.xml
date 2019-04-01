@@ -33,13 +33,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
             android:id="@+id/message_box" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:layout_below="@+id/message_box"
             android:minHeight="60dp"
             android:layout_margin="10dp"
@@ -50,7 +49,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:layout_below="@+id/message_box"
             android:minHeight="60dp"
             android:layout_margin="10dp"
@@ -66,7 +65,8 @@
         android:id="@+id/start_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:onClick="onStartGame" />
+        android:onClick="onStartGame"
+        />
 
     <Button
         android:layout_width="wrap_content"

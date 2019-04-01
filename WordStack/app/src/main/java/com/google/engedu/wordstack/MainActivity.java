@@ -24,6 +24,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         View word1LinearLayout = findViewById(R.id.word1);
-        word1LinearLayout.setOnTouchListener(new TouchListener());
-        //word1LinearLayout.setOnDragListener(new DragListener());
+//        word1LinearLayout.setOnTouchListener(new TouchListener());
+        word1LinearLayout.setOnDragListener(new DragListener());
         View word2LinearLayout = findViewById(R.id.word2);
-        word2LinearLayout.setOnTouchListener(new TouchListener());
-        //word2LinearLayout.setOnDragListener(new DragListener());
+//        word2LinearLayout.setOnTouchListener(new TouchListener());
+        word2LinearLayout.setOnDragListener(new DragListener());
     }
 
     private class TouchListener implements View.OnTouchListener {
@@ -97,7 +98,20 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+    
+    /*
+        ACTION_DRAG_STARED -> highlights the both linear layout where the word
+        will be dragged
 
+        ACTION_DRAG_ENTERED -> highlights green when the letter tile enter any 2 wordlinearLayout
+
+        ACTION_DRAG_EXITED -> if user dragged by didn't drop on the text view then
+        reset the blue color
+
+        ACTION_DRAG_ENDED -> reset the color to white once dragged on the wordLinearLayout
+
+        ACTION_DROP -> insert letter to placedTiles stack and change ViewGroup of the tile
+     */
     private class DragListener implements View.OnDragListener {
 
         public boolean onDrag(View v, DragEvent event) {
@@ -125,13 +139,10 @@ public class MainActivity extends AppCompatActivity {
                     tile.moveToViewGroup((ViewGroup) v);
                     if (stackedLayout.empty()) {
                         TextView messageBox = (TextView) findViewById(R.id.message_box);
+                        ((Button) findViewById(R.id.button)).setEnabled(false);
                         messageBox.setText(word1 + " " + word2);
                     }
-                    /**
-                     **
-                     **  YOUR CODE GOES HERE
-                     **
-                     **/
+                    placedTiles.push(tile);
                     return true;
             }
             return false;
@@ -164,12 +175,12 @@ public class MainActivity extends AppCompatActivity {
             scram+= word2.charAt(j);
             j++;
         }
-
         return  scram;
     }
 
     public boolean onStartGame(View view) {
         TextView messageBox = (TextView) findViewById(R.id.message_box);
+        ((Button) findViewById(R.id.button)).setEnabled(true);
 
         // CLEAR VIEWS
         LinearLayout word1LinearLayout = findViewById(R.id.word1);
@@ -178,8 +189,6 @@ public class MainActivity extends AppCompatActivity {
         word2LinearLayout.removeAllViews();
         stackedLayout.removeAllViews();
         stackedLayout.clear();
-
-
 
         // Words pick
         int word2_index = random.nextInt(words.size());
@@ -195,15 +204,15 @@ public class MainActivity extends AppCompatActivity {
 
         Stack<Character> letters = new Stack<>();
 
+        Log.d("test", word1 + " " + word2);
         for(int str_itr = 0; str_itr < scramble_word.length(); str_itr++)
             letters.push(scramble_word.charAt(str_itr));
 
-        messageBox.setText(scramble_word);
+        messageBox.setText("Game Started");
 
         while(!letters.isEmpty()){
             stackedLayout.push(new LetterTile(this, letters.pop()));
         }
-
 
         return true;
 
