@@ -24,3 +24,11 @@ you.
 - DragAndDrop, Stacks 
 
 <img src="https://raw.githubusercontent.com/ashcyber/applied-cs/master/WordStack/wordstack.gif" width="200px">
+
+### Touring Musician 
+> Find the distance between collection of points on a map using three algorithms -> [Beginning, Closest, Smallest], which can be chosen 
+using hte mod button. 
+--- 
+- Travelling Salesman Problem, CircularLinkedList 
+
+<img src="../../blob/master/TouringMusician/touring.gif?raw=true" width="200px">
