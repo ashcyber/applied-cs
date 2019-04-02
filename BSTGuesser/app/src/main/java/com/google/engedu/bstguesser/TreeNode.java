@@ -38,27 +38,37 @@ public class TreeNode {
         right = null;
     }
 
+    int maxHeight(TreeNode lt , TreeNode rt){
+        int lt_h = lt == null ? 0 : lt.height;
+        int rt_h = rt == null ? 0 : rt.height;
+
+        return lt_h > rt_h ? lt_h : rt_h;
+    }
+
+    // Recursive Insert
+    private TreeNode insertRecur(TreeNode node, int key){
+
+        // Leaf of the node reached -> create new node here
+        if(node == null){
+            return new TreeNode(key);
+        }
+        // move to the left
+        if(key < node.getValue()) {
+            node.left = insertRecur(node.left, key);
+        }
+        // move to the the right
+        else if(key > node.getValue()){
+            node.right = insertRecur(node.right, key);
+        }
+        // change height
+        node.height = maxHeight(node.left, node.right) + 1;
+
+        return node;
+    }
+
+
     public void insert(int valueToInsert) {
-
-        TreeNode rootNode = this;
-        TreeNode currNode = rootNode;
-        TreeNode newNode = new TreeNode(valueToInsert);
-
-        while(rootNode != null){
-            currNode = rootNode;
-            if(valueToInsert < rootNode.value){
-                rootNode = rootNode.left;
-            }else {
-                rootNode = rootNode.right;
-            }
-        }
-
-        if(valueToInsert < currNode.value){
-            currNode.left = newNode;
-        }else {
-            currNode.right = newNode;
-        }
-
+       insertRecur(this, valueToInsert);
     }
 
     public int getValue() {
