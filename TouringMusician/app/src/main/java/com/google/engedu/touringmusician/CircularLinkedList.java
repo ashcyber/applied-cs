@@ -28,7 +28,7 @@ public class CircularLinkedList implements Iterable<Point> {
     private class Node {
         Point point;
         Node prev, next;
-        
+
         Node(Point p){
             this.point = p;
             this.prev = null;
