@@ -96,7 +96,8 @@ public class TreeNode {
         paint.setColor(Color.BLACK);
         paint.setTextSize(SIZE * 2/3);
         paint.setTextAlign(Paint.Align.CENTER);
-        c.drawText(true ? String.valueOf(value) : "?", x, y + SIZE * 3/4, paint);
+        c.drawText(true  ? String.valueOf(value) : "?", x, y + SIZE * 3/4, paint);
+//        c.drawText(showValue  ? String.valueOf(value) : "?", x, y + SIZE * 3/4, paint);
 
 
         if (height > 0) {
