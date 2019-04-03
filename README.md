@@ -32,3 +32,10 @@ using hte mod button.
 - Travelling Salesman Problem, CircularLinkedList 
 
 <img src="../../blob/master/TouringMusician/touring.gif?raw=true" width="200px">
+
+### BST Guesser 
+> Guess the given nodes in the balanced binary search tree
+--- 
+- AVL Trees
+
+<img src="https://github.com/ashcyber/applied-cs/blob/master/BSTGuesser/bstGuesser.gif?raw=true" height="200px">
