@@ -21,6 +21,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
 
+import org.w3c.dom.Node;
+
 public class TreeNode {
     private static final int SIZE = 60;
     private static final int MARGIN = 20;
@@ -38,37 +40,145 @@ public class TreeNode {
         right = null;
     }
 
-    int maxHeight(TreeNode lt , TreeNode rt){
-        int lt_h = lt == null ? 0 : lt.height;
-        int rt_h = rt == null ? 0 : rt.height;
-
-        return lt_h > rt_h ? lt_h : rt_h;
+    /* START HELPER FUNCTIONS  */
+    private int height(TreeNode node){
+        if(node == null){
+            return  0;
+        }
+        return  node.height;
     }
 
-    // Recursive Insert
-    private TreeNode insertRecur(TreeNode node, int key){
+    private int maxHeight(int left_h, int right_h){
+        return left_h > right_h ? left_h : right_h;
+    }
 
-        // Leaf of the node reached -> create new node here
+    private int getBalance(TreeNode node){
         if(node == null){
+            return  0;
+        }
+            return (height(node.left) - height(node.right));
+    }
+
+    private void log(String msg){
+        Log.d("AVLTREE", msg);
+    }
+
+    private TreeNode leftRotate(TreeNode y){
+
+        /*
+                  O Y
+                    \
+                     O X
+                    /
+                   O K
+
+               TRANSFORMS TO
+
+                    O X
+                   /
+                Y O
+                   \
+                    O K
+
+         */
+
+        TreeNode x = y.right;
+        TreeNode k = x.left;
+
+        // ROTATION
+        x.left = y;
+        y.right = k;
+
+        // UPDATE HEIGHT of y first and then x value
+        y.height = maxHeight(height(y.left), height(y.right)) + 1;
+        x.height = maxHeight(height(x.left), height(x.right)) + 1;
+
+        // return the new root node
+        return x;
+    }
+
+    private TreeNode rightRotate(TreeNode y){
+        /*
+
+                    O Y
+                   /
+                X O
+                   \
+                    O K
+
+               TRANSFORMS TO
+
+                    O X
+                     \
+                      O Y
+                     /
+                    O K
+
+         */
+
+        TreeNode x = y.left;
+        TreeNode k = x.right;
+
+        // ROTATION
+        x.right = y;
+        y.left = k;
+
+        // UPDATE HEIGHTS
+        y.height = maxHeight(height(y.left), height(y.right)) + 1;
+        x.height = maxHeight(height(x.left), height(x.right)) + 1;
+
+
+        // return the new root node;
+        return x;
+    }
+
+    /* END HELPER FUNCTIONS */
+
+    public TreeNode insertRecur(TreeNode root, int key){
+        if(root == null){
             return new TreeNode(key);
         }
-        // move to the left
-        if(key < node.getValue()) {
-            node.left = insertRecur(node.left, key);
+        else if(key < root.value){
+            root.left = insertRecur(root.left, key);
+        }else if(key > root.value){
+            root.right = insertRecur(root.right, key);
         }
-        // move to the the right
-        else if(key > node.getValue()){
-            node.right = insertRecur(node.right, key);
+
+        root.height = maxHeight(height(root.left), height(root.right)) + 1;
+
+        int balance = getBalance(root);
+
+        if(balance < -1 || balance > 1){
+            // LEFT
+            if(balance > 1){
+                // LEFT CASE
+                if(key < root.left.value){
+                   // log("LEFT LEFT CASE");
+                    return  rightRotate(root);
+                }
+                // RIGHT CASE
+                else if(key > root.left.value){
+                    // log("LEFT RIGHT CASE");
+                    root.left = leftRotate(root.left);
+                    return rightRotate(root);
+                }
+            }
+            // RIGHT
+            else{
+                // LEFT CASE
+                if(key < root.right.value){
+                    // log("RIGHT LEFT CASE");
+                    root.right = rightRotate(root.right);
+                    return leftRotate(root);
+                }
+                // RIGHT CASE
+                else{
+                    // log("RIGHT RIGHT CASE");
+                    return leftRotate(root);
+                }
+            }
         }
-        // change height
-        node.height = maxHeight(node.left, node.right) + 1;
-
-        return node;
-    }
-
-
-    public void insert(int valueToInsert) {
-       insertRecur(this, valueToInsert);
+        return  root;
     }
 
     public int getValue() {
@@ -106,9 +216,7 @@ public class TreeNode {
         paint.setColor(Color.BLACK);
         paint.setTextSize(SIZE * 2/3);
         paint.setTextAlign(Paint.Align.CENTER);
-        c.drawText(true  ? String.valueOf(value) : "?", x, y + SIZE * 3/4, paint);
-//        c.drawText(showValue  ? String.valueOf(value) : "?", x, y + SIZE * 3/4, paint);
-
+        c.drawText(showValue  ? String.valueOf(value) : "?", x, y + SIZE * 3/4, paint);
 
         if (height > 0) {
             Paint heightPaint = new Paint();
