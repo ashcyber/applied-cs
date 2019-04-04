@@ -18,6 +18,7 @@ package com.google.engedu.bstguesser;
 import android.content.Context;
 import android.graphics.Canvas;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -83,6 +84,8 @@ public class BinaryTreeView extends View {
                     if (hitValue != -1) {
                         invalidate();
                         if (hitValue != targetValue) {
+                            if(searchSequence.indexOf(hitValue) != -1)
+                                searchSequence.remove(searchSequence.indexOf(hitValue));
                             tree.invalidateNode(targetValue);
                         }
                         searchPosition++;
